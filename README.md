@@ -8,7 +8,7 @@ When shellcode is defined using the `CODE_SIGNITURE` macro, it prefixes the func
 
 ## Usage
 
-To add new shellcode create a new file in the `shellcode/groups` directory then create a namespace with the group name and place your shellcode inside of it. When 
+To add new shellcode create a new file in the `shellcode/groups` directory then create a namespace with the group name and place your shellcode inside of it. 
 
 Shellcode definition:
 ```cpp
