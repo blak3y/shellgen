@@ -69,7 +69,7 @@ namespace Console
 
 ## Remarks
 
-When passing pointers to the shellcode in the compile signiture it is recommended that you use the `DUMMY_ALLOC` macro, when this isn't used the compiler can either optimise the value passed to inlined inside of the shellcode or if you pass a pointer to a global variable it can be optimised away. An example of this being used can be found in the **usage** section.
+When passing pointers to the shellcode in the compile signiture it is recommended that you use the `DUMMY_ALLOC` macro, when this isn't used the compiler can either optimise the value passed to be inlined or if you pass a pointer to a global variable it can be optimised away. An example of `DUMMY_ALLOC` being used can be found in the **usage** section.
 
 When calling a function inside of the shellcode it is required that you use the `INLINE_CALL` macro, when this isn't used the function call will use a relative call to the function address that lives in the IAT as this is shellcode and intended as standalone injectable blobs the relative calls will not be resolved and executing this shellcode will cause a crash.  
 
