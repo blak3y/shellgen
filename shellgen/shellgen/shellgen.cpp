@@ -1,7 +1,7 @@
 #include "shellgen.hpp"
 
 #include "pdbparse.hpp"
-#include "file-analyser.hpp"
+#include "pe-analyser.hpp"
 #include "file-generator.hpp"
 
 #include <filesystem>
@@ -11,7 +11,6 @@ void shellgen::GenerateFile()
 {
 	std::filesystem::path currentPath = std::filesystem::current_path();
 	std::filesystem::path pdbPath = currentPath / "shellgen.pdb";
-	std::filesystem::path filePath = currentPath / "shellgen.exe";
 	std::filesystem::path outputPath = currentPath / "shellcode/";
 
 	try {
@@ -21,7 +20,7 @@ void shellgen::GenerateFile()
 			throw std::runtime_error("Failed to parse symbols from pdb.");
 		}
 
-		auto analyser = std::make_unique<FileAnalyser>(filePath, functionList);
+		auto analyser = std::make_unique<PeAnalyser>(functionList);
 
 		std::vector<Function> parsedFunctionList{};
 		if (!analyser->AnalyseFunctions("__CODE__", parsedFunctionList)) {

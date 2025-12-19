@@ -2,18 +2,18 @@
 
 #include "../macros.hpp"
 
+#include <Windows.h>
+#include <iostream>
+
 namespace Console
 {
 	CODE_SIGNITURE(void, Output)(const char* string)
 	{
-		DEFVAR(printf, 1);
+		DEFVAR64(printf, 1);
+		DEFVAR32(prot, 1);
+		
+		AllocConsole();
 
 		INLINE_CALL(void, printf, (const char*), string);
-	}
-
-	COMPILE_SIGNITURE(Output)
-	{
-		const char* str = DUMMY_ALLOC(char*);
-		CALL_CODE(Output, str);
 	}
 }

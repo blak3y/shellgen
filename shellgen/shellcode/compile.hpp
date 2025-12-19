@@ -4,5 +4,5 @@
 
 void compile()
 {
-	COMPILE_CODE(Console, Output);
+	CALL_CODE(Console, Output, DUMMY_ALLOC(char*));
 }

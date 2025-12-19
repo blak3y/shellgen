@@ -4,8 +4,37 @@
 
 namespace Console
 {
+	struct ImportData {
+		char moduleName[32];
+		char importName[32];
+		unsigned int offset;
+	};
+
 	namespace Output {
-		static unsigned char bytes[13] = { 0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x48,0xff,0xe0 };
-		static unsigned char variables[1] = { 0x02 };
+		static unsigned char bytes[59] = { 0x40,0x53,0x48,0x83,0xec,0x20,0x48,0x8b,0xd9,0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xff,0xd0,0x48,0x8b,0xc8,0x33,0xd2,0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xff,0xd0,0x48,0x8b,0xcb,0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x48,0x83,0xc4,0x20,0x5b,0x48,0xff,0xe0 };
+		static unsigned int variables[1] = { 0x2b };
+
+		static int numberOfDynamicImports = 2;
+		static ImportData dynamicImports[2] = {
+			{ "KERNEL32.dll","GetConsoleWindow",0x0b },
+			{ "USER32.dll","ShowWindow",0x1c }
+		};
 	}
+}
+
+#define RESOLVE_CONSOLE_IMPORTS(function, getModuleBase, getFunctionAddress, moduleType) for (int i = 0; i < sizeof(Console::##function::dynamicImports) / sizeof(Console::ImportData); i++) \
+{ \
+	auto& dynamicImport = Console::##function::dynamicImports[i];\
+\
+	##moduleType hModule = (##moduleType)##getModuleBase(dynamicImport.moduleName); \
+	if (!hModule) { \
+		continue; \
+	} \
+\
+	unsigned long long proc = (unsigned long long)##getFunctionAddress((##moduleType)(hModule), dynamicImport.importName);\
+	if (!proc) {\
+		continue; \
+	} \
+\
+	*(unsigned long long*)(Console::##function::bytes + dynamicImport.offset) = proc; \
 }

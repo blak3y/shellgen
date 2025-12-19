@@ -5,6 +5,8 @@ int main()
 {
 	shellgen::GenerateFile();
 	
-	// will cause crash
-	compile();
+	// Will never run but forces compilation of shellcode
+	if (DUMMY_ALLOC(void*)) {
+		compile();
+	}
 }

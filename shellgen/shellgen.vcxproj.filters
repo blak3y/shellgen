@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="shellgen\file-analyser.cpp">
+    <ClCompile Include="shellgen\pe-analyser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shellgen\file-generator.cpp">
@@ -30,9 +30,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dependencies\fadec\decode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\fadec\encode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\fadec\format.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shellgen\file-analyser.hpp">
+    <ClInclude Include="shellgen\pe-analyser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shellgen\file-generator.hpp">
@@ -56,5 +65,25 @@
     <ClInclude Include="shellcode\groups\console.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dependencies\fadec\fadec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\fadec\fadec-enc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dependencies\fadec\fadec-decode-private.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="dependencies\fadec\fadec-decode-public.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="dependencies\fadec\fadec-encode-private.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="dependencies\fadec\fadec-encode-public.inc">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

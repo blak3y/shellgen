@@ -1,6 +1,6 @@
 #pragma once
 
-#include "file-analyser.hpp"
+#include "pe-analyser.hpp"
 
 namespace shellgen
 {
