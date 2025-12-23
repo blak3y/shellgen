@@ -7,6 +7,8 @@
 #include "fadec.h"
 #include "fadec-enc.h"
 
+#include "obfuscator.hpp"
+
 shellgen::PeAnalyser::PeAnalyser(std::vector<shellgen::FunctionMetadata>& functions) : m_Functions(functions), m_ImportLookup({})
 {
 	m_ImageBase = reinterpret_cast<uint8_t*>(GetModuleHandle(nullptr));
@@ -58,6 +60,16 @@ bool shellgen::PeAnalyser::AnalyseFunctions(std::string searchTerm, std::vector<
 		// Get all variables inside function
 		FindVariables(parsedFunction);
 
+		// Obfuscate the parsed function with a seed
+		auto& obfuscator = Obfuscator::Get();
+		obfuscator.SetSeed(GetCurrentProcessId() * GetCurrentThreadId());
+		obfuscator.Settings().mbaObfuscation = true;
+		obfuscator.Settings().constantEncoding = true;
+		obfuscator.Settings().instructionSubstitution = true;
+		obfuscator.Settings().junkInsertion = true;
+		obfuscator.Settings().mbaDepth = 3;
+		obfuscator.Process(parsedFunction);
+
 		std::cout << std::format("Analysed {}::{}", parsedFunction.group, parsedFunction.metadata.name) << std::endl;
 		std::cout << std::format("Group: {}", parsedFunction.group) << std::endl;
 		std::cout << std::format("Bytes: {}", parsedFunction.bytes.size()) << std::endl;
@@ -70,61 +82,23 @@ bool shellgen::PeAnalyser::AnalyseFunctions(std::string searchTerm, std::vector<
 	return true;
 }
 
-void shellgen::PeAnalyser::FindVariableType(Function& function, const uint8_t type)
+void shellgen::PeAnalyser::FindVariables(Function& function)
 {
-	printf("Looking for variables of size %i\n", type);
+	printf("Looking for variables\n");
 
 	uint64_t signiture = 0xDEADBEEFDEADBEEF;
-
 	int itterations = 0;
 	while (itterations < 100)
 	{
-		size_t listSize = 0;
-		for (auto var : function.variables) {
-			if (var.type == type) {
-				listSize++;
-			}
-		}
-
-		printf("listSize: %i\n", listSize);
-
+		size_t listSize = function.variables.size();
 		bool hasFound = false;
 		for (int i = 0; i < function.metadata.length; i++)
 		{
-			switch (type)
+			if (*(uint64_t*)(function.bytes.data() + i) == signiture - (listSize + 1))
 			{
-			case 1:
-				if (*(uint8_t*)(function.bytes.data() + i) == 0xAA - (listSize + 1))
-				{
-					function.variables.emplace_back(type, i);
-					*(uint8_t*)(function.bytes.data() + i) = 0;
-					hasFound = true;
-				}
-				break;
-			case 2:
-				if (*(uint16_t*)(function.bytes.data() + i) == 0xFACE - (listSize + 1))
-				{
-					function.variables.emplace_back(type, i);
-					*(uint16_t*)(function.bytes.data() + i) = 0;
-					hasFound = true;
-				}
-				break;
-			case 4:
-				if (*(uint32_t*)(function.bytes.data() + i) == 0xCAFEBABE - (listSize + 1))
-				{
-					function.variables.emplace_back(type, i);
-					*(uint32_t*)(function.bytes.data() + i) = 0;
-					hasFound = true;
-				}
-				break;
-			case 8:
-				if (*(uint64_t*)(function.bytes.data() + i) == 0xDEADC0DEBEEFCAFE - (listSize + 1))
-				{
-					function.variables.emplace_back(type, i);
-					*(uint64_t*)(function.bytes.data() + i) = 0;
-					hasFound = true;
-				}
-				break;
+				function.variables.emplace_back(i);
+				*(uint64_t*)(function.bytes.data() + i) = 0;
+				hasFound = true;
 			}
 		}
 
@@ -132,18 +106,9 @@ void shellgen::PeAnalyser::FindVariableType(Function& function, const uint8_t ty
 			break;
 		}
 		else {
-			printf("Variable found with size %i\n", type);
+			printf("Variable found\n");
 			itterations++;
 		}
-	}
-}
-
-void shellgen::PeAnalyser::FindVariables(Function& function)
-{
-	uint8_t variableSize[] = { 8, 4, 2, 1 };
-	for (int i = 0; i < sizeof(variableSize); i++)
-	{
-		FindVariableType(function, variableSize[i]);
 	}
 }
 

@@ -5,6 +5,8 @@
 
 int main()
 {
+	FreeConsole();
+
 	size_t shellLength = sizeof(Console::Output::bytes);
 	void* shellBuffer = VirtualAlloc(nullptr, shellLength, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 	if (!shellBuffer) {
@@ -12,6 +14,7 @@ int main()
 	}
 
 	LoadLibraryA("user32.dll");
+	LoadLibraryA("kernel32.dll");
 
 	for (int i = 0; i < sizeof(Console::Output::dynamicImports) / sizeof(Console::ImportData); i++) {
 		auto& dynamicImport = Console::Output::dynamicImports[i]; 
@@ -33,7 +36,8 @@ int main()
 	*(void**)(Console::Output::bytes + Console::Output::variables[0]) = printf;
 	memcpy(shellBuffer, Console::Output::bytes, shellLength);
 
-	reinterpret_cast<void(*)(const char*)>(shellBuffer)("Hello World!\n");
-
+	void* buffer = reinterpret_cast<void*(*)(const char*)>(shellBuffer)("Hello World!\n");
+	printf("0x%llx\n", buffer);
 	Sleep(5000);
+	return 0;
 }

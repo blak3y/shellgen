@@ -15,7 +15,6 @@ namespace shellgen
 	};
 	
 	struct Variable {
-		uint8_t type;
 		uint32_t offset;
 	};
 
@@ -39,7 +38,6 @@ namespace shellgen
 
 		bool AnalyseFunctions(std::string searchTerm, std::vector<Function>& functions);
 	private:
-		void FindVariableType(Function& function, const uint8_t type);
 		void FindVariables(Function& function);
 		void RebuildImports(Function& function);
 		void BuildImportLookupTable();

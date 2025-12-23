@@ -39,6 +39,9 @@
     <ClCompile Include="dependencies\fadec\format.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shellgen\obfuscator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shellgen\pe-analyser.hpp">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dependencies\fadec\fadec-enc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shellgen\obfuscator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

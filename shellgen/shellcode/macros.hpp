@@ -3,10 +3,7 @@
 #include <Windows.h>
 
 // Index should always start from 1
-#define DEFVAR64(name, index) constexpr unsigned long long name = 0xDEADC0DEBEEFCAFE - index
-#define DEFVAR32(name, index) constexpr unsigned long name = 0xCAFEBABE - index
-#define DEFVAR16(name, index) constexpr unsigned short name = 0xFACE - index
-#define DEFVAR8(name, index)  constexpr unsigned char name = 0xAA - index
+#define DEFVAR64(name, index) constexpr unsigned long long name = 0xDEADBEEFDEADBEEF - index
 
 // argument types should be in brackets
 #define INLINE_CALL(returnType, address, argumentTypes, ...) reinterpret_cast<##returnType(*)##argumentTypes>(address)(__VA_ARGS__)

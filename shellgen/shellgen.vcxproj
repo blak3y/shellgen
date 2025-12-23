@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)dependencies\fadec;$(ProjectDir)dependencies;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)dependencies\fadec;$(ProjectDir)dependencies;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)dependencies\fadec;$(ProjectDir)dependencies;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -82,6 +88,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,6 +104,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +153,7 @@
       <DisableSpecificWarnings>4146</DisableSpecificWarnings>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shellgen\obfuscator.cpp" />
     <ClCompile Include="shellgen\pe-analyser.cpp" />
     <ClCompile Include="shellgen\file-generator.cpp" />
     <ClCompile Include="shellgen\pdbparse.cpp" />
@@ -155,6 +166,7 @@
     <ClInclude Include="shellcode\groups\console.hpp" />
     <ClInclude Include="shellcode\groups\test.hpp" />
     <ClInclude Include="shellcode\macros.hpp" />
+    <ClInclude Include="shellgen\obfuscator.hpp" />
     <ClInclude Include="shellgen\pe-analyser.hpp" />
     <ClInclude Include="shellgen\file-generator.hpp" />
     <ClInclude Include="shellgen\pdbparse.hpp" />
