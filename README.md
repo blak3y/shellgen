@@ -74,6 +74,4 @@ When passing pointers to the shellcode in the compile signiture it is recommende
 When calling a function inside of the shellcode it is required that you use the `INLINE_CALL` macro, when this isn't used the function call will use a relative call to the function address that lives in the IAT as this is shellcode and intended as standalone injectable blobs the relative calls will not be resolved and executing this shellcode will cause a crash.  
 
 ## Roadmap
-
-- Disassembler integration to automatically resolve IAT calls (removing the need for manual `INLINE_CALL` usage)
 - Output variable names alongside their offsets for easier patching
